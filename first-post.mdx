@@ -7,6 +7,14 @@ tags: ['next.js']
 
 # Create Personal Site With Next.js 13 (app router) and MDX
 
+## Test on-demand revalidate
+in browser:
+http://localhost:3000/api/revalidate?path=/blog/[slug]&secret=somethingonlymeknow
+
+replace http://localhost:3000 to the real domain once deployed
+
+the secret is set in .env.local MY_SECRET_TOKEN
+
 ## Project Setup
 ```bash
     npx create-next-app@latest mysite
@@ -80,17 +88,13 @@ This sentence has `code` using backticks
    ![avatar](/img/avatar1.png)
 
 ## Test generateStaticParams
+
 ```bash
-npm run build #in order to test ISR(incremental Static Regeneration)
+#in order to test ISR(incremental Static Regeneration)
+npm run build 
+```
+
 > Incremental static regeneration (ISR) is the architecture behind Next. js that allows pages to be updated after a site has been built and deployed. Compared to server-side rendered (SSR) pages and statically-generated pages, ISR pages have distinct advantages. They are not rebuilt for each user, so they load quickly 
-
-## Test on-demand revalidate
-in browser:
-http://localhost:3000/api/revalidate?path=/blog/[slug]&secret=somethingonlymeknow
-
-replace http://localhost:3000 to the real domain once deployed
-
-the secret is set in .env.local MY_SECRET_TOKEN
 
 
 ## Reference
