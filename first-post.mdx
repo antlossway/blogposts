@@ -7,35 +7,47 @@ tags: ['next.js']
 
 # Create Personal Site With Next.js 13 (app router) and MDX
 
-## Test on-demand revalidate
-in browser:
-http://localhost:3000/api/revalidate?path=/blog/[slug]&secret=somethingonlymeknow
-
-replace http://localhost:3000 to the real domain once deployed
-
-the secret is set in .env.local MY_SECRET_TOKEN
+<LinkToNewTab text="some link" url="https://blog.webdevsimplified.com" />
 
 ## Project Setup
+
+Two folders will be created.
+1. one folder holds the frontend and logic of the website, which is based on Next.js (v13.4 app router)
 ```bash
     npx create-next-app@latest mysite
     npn run dev
 ```
+2. the other folder holds all the .mdx files for blog posts. This folder will sync to a github repository.
+```bash
+mkdir blogposts
+cd blogposts
+vim first-post.mdx
+```
 
-## File Tree of app folder
+## File Tree of mysite app folder
+
+There is a wonderful article which [visualize the Next.js app router mechanism](https://www.builder.io/blog/next-13-app-router).
+
+Below is my set up:
 
 ![file tree](/img/file-tree.webp)
 
-## MDX
+## Markdown
 
-below is from [next.js document](https://nextjs.org/docs/app/building-your-application/configuring/mdx)
+Using [Markdown](https://www.markdownguide.org/getting-started/) language to write blog is perfect for developers.
+I can use my favorite editor vim to write plain text, and ask javascript plugin to turn it into Html elements, which is stylable via CSS.
+TailwindCSS provides a typography plugin [prose](https://tailwindcss.com/docs/typography-plugin) to make very nice   markdown file
+
+Github readme
+
+## Markdown and MDX
+
+What is Markdown?
+
+Below is quoted from [next.js document](https://nextjs.org/docs/app/building-your-application/configuring/mdx)
 
 > [Markdown](https://daringfireball.net/projects/markdown/syntax) is a lightweight markup language used to format text. It allows you to write using plain text syntax and convert it to structurally valid HTML.
 
-This sentence has `code` using backticks
-
-## horizontal line to separate sections
-
----
 
 ## link that is open in new tab, below seems not working
 
@@ -77,6 +89,14 @@ npm run build
 
 > Incremental static regeneration (ISR) is the architecture behind Next.js that allows pages to be updated after a site has been built and deployed.
 Compared to server-side rendered (SSR) pages and statically-generated pages, ISR pages have distinct advantages. They are not rebuilt for each user, so they load quickly 
+
+## Test on-demand revalidate
+in browser:
+http://localhost:3000/api/revalidate?path=/blog/[slug]&secret=somethingonlymeknow
+
+replace http://localhost:3000 to the real domain once deployed
+
+the secret is set in .env.local MY_SECRET_TOKEN
 
 
 ## Reference
