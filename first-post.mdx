@@ -23,7 +23,7 @@ the secret is set in .env.local MY_SECRET_TOKEN
 
 ## File Tree of app folder
 
-![file tree](https://raw.githubusercontent.com/antlossway/blogposts/main/img/file-tree.png)
+![file tree](/img/file-tree.webp)
 
 ## MDX
 
@@ -43,20 +43,40 @@ This sentence has `code` using backticks
   Markdown
 </a>
 
-## images
+## Images
 
-1. local image in /public/img
+1. local image (in the same repository /public/img)
 
-   ![avatar](/img/avatar1.png)
+use relative path for the source URL like this: /img/avatar.png
+
+2. remote image hosted on github (in my blogpost repository)
+
+use URL like this: https://raw.githubusercontent.com/[account]/blogposts/main/images/avatar.png
+
+## Static Site Generation (SSG) or Server Side Rendering (SSR)
+
+It's recommended to use SSG whenever possible because the pages can be built once and served by CDN, which makes the page loading super fast.
+If the page can be pre-rendered **ahead** of a user's request, then we should choose SSG.
+
+The typical use cases includes:
+- Blog posts
+- Landing pages
+- Documentation
+- Product listing
+
+On the other hand, if the page content change requently, we should use SSR instead.
+SSR is slower than SSG, but the pre-rended page will always be up-to-date.
+Or we can skip pre-rendering and use client-side Javascript to populate data, which surely will be slower than SSR.
 
 ## Test generateStaticParams
 
 ```bash
-#in order to test ISR(incremental Static Regeneration)
+#in order to test ISR(incremental Static Regeneration), we need to build project
 npm run build 
 ```
 
-> Incremental static regeneration (ISR) is the architecture behind Next. js that allows pages to be updated after a site has been built and deployed. Compared to server-side rendered (SSR) pages and statically-generated pages, ISR pages have distinct advantages. They are not rebuilt for each user, so they load quickly 
+> Incremental static regeneration (ISR) is the architecture behind Next.js that allows pages to be updated after a site has been built and deployed.
+Compared to server-side rendered (SSR) pages and statically-generated pages, ISR pages have distinct advantages. They are not rebuilt for each user, so they load quickly 
 
 
 ## Reference
