@@ -1,7 +1,7 @@
 ---
 title: "create personal site with next.js and mdx"
 date: "2023-06-11"
-description: "tech note for this project"
+description: "using next.js app router to easily create page, using markdown to write posts and host on github, then remotely fetched and displayed using tailwind prose plugin"
 tags: ['next.js']
 ---
 
@@ -12,7 +12,7 @@ tags: ['next.js']
 ## Project Setup
 
 Two folders will be created.
-1. one folder holds the frontend and logic of the website, which is based on Next.js (v13.4 app router)
+1. one folder build the pages and logic of the website, which is based on Next.js (v13.4 app router)
 ```bash
     npx create-next-app@latest mysite
     npn run dev
@@ -23,6 +23,8 @@ mkdir blogposts
 cd blogposts
 vim first-post.mdx
 ```
+mysite project will fetch blog posts from remotely located on github server using next-mdx-remote plugin.
+
 
 ## File Tree of mysite app folder
 
@@ -32,14 +34,6 @@ Below is my set up:
 
 ![file tree](/img/file-tree.webp)
 
-## Markdown
-
-Using [Markdown](https://www.markdownguide.org/getting-started/) language to write blog is perfect for developers.
-I can use my favorite editor vim to write plain text, and ask javascript plugin to turn it into Html elements, which is stylable via CSS.
-TailwindCSS provides a typography plugin [prose](https://tailwindcss.com/docs/typography-plugin) to make very nice   markdown file
-
-Github readme
-
 ## Markdown and MDX
 
 What is Markdown?
@@ -48,6 +42,8 @@ Below is quoted from [next.js document](https://nextjs.org/docs/app/building-you
 
 > [Markdown](https://daringfireball.net/projects/markdown/syntax) is a lightweight markup language used to format text. It allows you to write using plain text syntax and convert it to structurally valid HTML.
 
+
+TailwindCSS provides a [typography plugin 'prose'](https://tailwindcss.com/docs/typography-plugin) that will turn the Markdown text into nice-looking web page.
 
 ## link that is open in new tab, below seems not working
 
