@@ -2,31 +2,34 @@
 title: "create personal site with next.js and mdx"
 date: "2023-06-11"
 description: "using next.js app router to easily create page, using markdown to write posts and host on github, then remotely fetched and displayed using tailwind prose plugin"
-tags: ['next.js']
+tags: ["next.js"]
 ---
 
 # Create Personal Site With Next.js 13 (app router) and MDX
 
-<LinkToNewTab text="some link" url="https://blog.webdevsimplified.com" />
-
 ## Project Setup
 
 Two folders will be created.
+
 1. one folder build the pages and logic of the website, which is based on Next.js (v13.4 app router)
+
 ```bash
     npx create-next-app@latest mysite
     npn run dev
 ```
+
 2. the other folder holds all the .mdx files for blog posts. This folder will sync to a github repository.
+
 ```bash
 mkdir blogposts
 cd blogposts
 vim first-post.mdx
 
 ```
+
 mysite project(next.js) will fetch blog posts(hosted on github) using **next-mdx-remote** plugin.
 
-*note*: file name should be lower case, I met problem when capital letter is included in filename that next.js can not render the page. The console display "Document not found" error.
+_note_: file name should be lower case, I met problem when capital letter is included in filename that next.js can not render the page. The console display "Document not found" error.
 
 ## File Tree of mysite app folder
 
@@ -42,9 +45,8 @@ What is Markdown?
 
 Below is quoted from [next.js document](https://nextjs.org/docs/app/building-your-application/configuring/mdx)
 
-> [Markdown](https://daringfireball.net/projects/markdown/syntax) is a lightweight markup language used to format text. 
+> [Markdown](https://daringfireball.net/projects/markdown/syntax) is a lightweight markup language used to format text.
 > It allows you to write using plain text syntax and convert it to structurally valid HTML.
-
 
 TailwindCSS provides a [typography plugin 'prose'](https://tailwindcss.com/docs/typography-plugin) that will turn the Markdown text into nice-looking web page.
 
@@ -64,6 +66,7 @@ It's recommended to use SSG whenever possible because the pages can be built onc
 If the page can be pre-rendered **ahead** of a user's request, then we should choose SSG.
 
 The typical use cases includes:
+
 - Blog posts
 - Landing pages
 - Documentation
@@ -73,17 +76,20 @@ On the other hand, if the page content change requently, we should use SSR inste
 SSR is slower than SSG, but the pre-rended page will always be up-to-date.
 Or we can skip pre-rendering and use client-side Javascript to populate data, which surely will be slower than SSR.
 
-## Test generateStaticParams
+## ISR(incremental Static Regeneration)
+
+in order to test ISR(incremental Static Regeneration), we need to build project
 
 ```bash
-#in order to test ISR(incremental Static Regeneration), we need to build project
-npm run build 
+
+npm run build
 ```
 
 > Incremental static regeneration (ISR) is the architecture behind Next.js that allows pages to be updated after a site has been built and deployed.
-Compared to server-side rendered (SSR) pages and statically-generated pages, ISR pages have distinct advantages. They are not rebuilt for each user, so they load quickly 
+> Compared to server-side rendered (SSR) pages and statically-generated pages, ISR pages have distinct advantages. They are not rebuilt for each user, so they load quickly
 
 ## Test on-demand revalidate
+
 in browser:
 http://localhost:3000/api/revalidate?path=/blog/[slug]&secret=somethingonlymeknow
 
@@ -91,10 +97,6 @@ replace http://localhost:3000 to the real domain once deployed
 
 the secret is set in .env.local MY_SECRET_TOKEN
 
-
 ## Reference
+
 <Video id="6ih_3m_UPKg" />
-
-<Button text="test button" />
-
-
