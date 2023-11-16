@@ -1,0 +1,102 @@
+---
+title: "CSS transtion from height 0 to auto"
+date: "2023-11-16"
+description: "using grid to easily transtion height from 0 to auto, and the work-around solution in tailwindcss"
+tags: ["tailwind", "CSS"]
+---
+
+# How to using CSS to transition from height 0 to auto
+
+At this moment, CSS does not support transition to height auto. 
+So if we want to simply write "transition: height 500ms" to "height: auto", it will not work as we expected.
+
+I like the solution provided by the article in the reference by using grid.
+`grid-template-rows` is a property that support transition.
+
+Example: set `overflow: hidden` on child div, when hovering on the parent div, grid-template-rows transition from 0fr to 1fr.
+```html
+<div class="example">
+  <div>
+    transition height auto using CSS grid
+  </div>
+</div>
+```
+
+```css
+.example {
+  margin: 1rem;
+  padding: 1rem;
+  background-color: #ed5ab3;
+  border-radius: 5px;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 500ms;
+}
+
+.example > div {
+  color: white;
+  overflow: hidden;  
+}
+
+.example:hover {
+  grid-template-rows: 1fr;
+}
+
+```
+
+As much as I love tailwindcss, I'm quite disappointed to find out that currently tailwindcss v3.3.5 does not support transition on grid-template-rows.
+
+This is what I have tried: 
+1. extend theme in tailwind.config.js
+```
+theme: {
+  extend:{
+...
+      gridTemplateRows: {
+        0: "0fr",
+      },
+      transitionProperty: {
+        "grid-template-rows": "grid-template-rows",
+      },
+```
+
+2. in component js file: 
+```js
+     <div className="p-4 m-4 rounded-lg bg-slate-500 grid grid-rows-0 hover:grid-rows-1 transition-[grid-template-rows] duration-1000  ">
+       <div className="text-white overflow-hidden">tailwindcss - attempt to transition height auto using grid</div>
+     </div>
+```
+But the result is that there is no transition. 
+
+
+## a work-around to simulate transtion to height auto in tailwindcss
+
+Since we can not using heigth auto, and we don't want to set a fixed target height, we can use `max-height`.
+The idea is to transition child div from `max-h-0` to `max-h-[500px]`, the 500px is a height value that we think the content will never exceed,
+therefore effectively like a `height: auto`.
+
+Note that the tailwind `group-{modifier}` is used to style child element based on parent state.
+When we hover on parent div, the child div will make transition on max-height.
+```
+      <div className="p-4 m-8 rounded-lg bg-blue-500 group  ">
+        <div className="text-white overflow-hidden max-h-0 group-hover:max-h-[500px] transition-max-height duration-[1s] ">
+          {children}
+        </div>
+      </div>
+```
+
+## demo results
+
+<HeightTransition>
+tailwindcss - transition height auto using max-height
+</HeightTransition>
+
+As shown above, 
+1. the first row is using grid with CSS module,
+2. the second row is the failed attempt to replicate grid method in tailwindcss.
+3. the third row is using tailwindcss max-height method.
+
+However, I feel the effect of 1st row is more natual than the 3rd row although the transition delay is the same 500ms.
+
+## References
+[https://keithjgrant.com/posts/2023/04/transitioning-to-height-auto/](https://keithjgrant.com/posts/2023/04/transitioning-to-height-auto/)
