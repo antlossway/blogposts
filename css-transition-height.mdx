@@ -5,12 +5,12 @@ description: "using grid to easily transtion height from 0 to auto, and the work
 tags: ["tailwind", "CSS"]
 ---
 
-# How to using CSS to transition from height 0 to auto
+# How to use CSS transition from height 0 to auto
 
 At this moment, CSS does not support transition to height auto. 
 So if we want to simply write "transition: height 500ms" to "height: auto", it will not work as we expected.
 
-I like the solution provided by the article in the reference by using grid.
+I like the solution proposed by this article in the reference by using grid.
 `grid-template-rows` is a property that support transition.
 
 Example: set `overflow: hidden` on child div, when hovering on the parent div, grid-template-rows transition from 0fr to 1fr.
@@ -57,6 +57,7 @@ theme: {
       },
       transitionProperty: {
         "grid-template-rows": "grid-template-rows",
+        "max-height": "max-height",
       },
 ```
 
