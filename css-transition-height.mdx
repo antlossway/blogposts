@@ -72,7 +72,7 @@ But the result is that there is no transition.
 
 ## a work-around to simulate transtion to height auto in tailwindcss
 
-Since we can not using heigth auto, and we don't want to set a fixed target height, we can use `max-height`.
+Following [this post](https://www.geeksforgeeks.org/how-to-make-transition-height-from-0-to-auto-using-css/), since we can not using heigth auto, and we don't want to set a fixed target height, we can use `max-height`.
 The idea is to transition child div from `max-h-0` to `max-h-[500px]`, the 500px is a height value that we think the content will never exceed,
 therefore effectively like a `height: auto`.
 
@@ -97,7 +97,10 @@ As shown above,
 2. the second row is the failed attempt to replicate grid method in tailwindcss.
 3. the third row is using tailwindcss max-height method.
 
-However, I feel the effect of 1st row is more natual than the 3rd row although the transition delay is the same 500ms.
+However, I'm not convinced by the max-height method, when hover on the 3rd row, I'm not sure to perceive a transition.
+So, the vanilla CSS wins on this experiment.
 
 ## References
 [https://keithjgrant.com/posts/2023/04/transitioning-to-height-auto/](https://keithjgrant.com/posts/2023/04/transitioning-to-height-auto/)
+
+[https://www.geeksforgeeks.org/how-to-make-transition-height-from-0-to-auto-using-css/](https://www.geeksforgeeks.org/how-to-make-transition-height-from-0-to-auto-using-css/)
