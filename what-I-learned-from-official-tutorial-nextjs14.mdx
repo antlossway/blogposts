@@ -1,0 +1,252 @@
+---
+title: "What I learned from official tutorial of Next.js 14"
+date: "2023-12-10"
+description: "The official tutorial of Next.js 14 is well made with step by step instructions and covers a wide range of topics. I keep notes and share my thoughts in this post."
+tags: ["next.js"]
+---
+
+# What I learned from official tutorial of Next.js 14
+
+Next.js 14 comes with a tutorial: [https://nextjs.org/learn/dashboard-app](https://nextjs.org/learn/dashboard-app)
+This official tutorial is well made with step by step instructions and covers a wide range of topics.
+I highly recommend it for anyone who wants to discover Next.js.
+
+However I wish they can improve the authentication part, to give a high-level introduction of how the magic works, why we need to put some code in this file and some code in another file. In the tutorial there is code all over the place, at least for me, it's difficult to grasp the rational behind.
+
+A few months ago when I just started to learn web development, page router was still the standard way to manage routing in Next.js 13. However, vercel team has been relentlessly working on updates over updates, as a newbie webdev in 2023, I have to keep up with all the new terms, e.g SSG, SSR, partial rendering, server component, server action, ...etc.
+
+This brings up the main critics about Next.js: they are using too much magic, too many Next.js only feature. This would cause a problem for developers that the more they using Next.js, the better they are at using it as a framework, but not better at using fundamental technologies like JavaSript or React.
+
+Nevertheless, since Next.js is my start point of webdev journey and so far it serves me well, I will keep using it and being consious about knowing how React and Javascript work.
+
+Below summarize the key points that I learned from this turorial.
+
+## Colocation
+
+In the past I used "/src" folder outside of "/app" folder to keep component files and other non-routing related files,
+actually there is no need to do that.
+
+> In addition to special files, you have the option to colocate your own files (e.g. components, styles, tests, etc) inside folders in the app directory.
+> This is because while folders define routes, only the contents returned by page.js or route.js are publicly addressable.
+
+## Rendering
+
+### Static Rendering
+
+Data fetching and rendering happens on the server at build time or during revalication.
+
+### Dynamic Rendering
+
+Content is rendered on the server for each user at request time.
+
+We can turn a page (default Static rendering) into Dynamic rendering using segment config option:
+
+```
+// including below line in a page.tsx
+export const dynamic = "force-dynamic"
+```
+
+### Streaming
+
+Using Dynamic rendering has a problem that the slow data fetches can impact the performance of the whole page.
+
+> Streaming is a data transfer technique that allows you to break down a route into smaller "chunks" and progressively stream them from the server to the client as they become ready.
+> By streaming, you can prevent slow data requests from blocking your whole page. This allows the user to see and interact with parts of the page without waiting for all the data to load before any UI can be shown to the user.
+
+#### Two ways to implement streaming:
+
+1. At the page level, with `loading.tsx` file
+   `loading.tsx` is a special Next.js file built on top of Suspense, it allows you to create fallback UI to show as a replacement while page content loads.
+2. for specific components, with `<Suspense>`
+
+#### Where to put Suspense boundary ?
+
+- We could stream the whole page with loading.tsx, but that may lead to a longer loading time if one of the components has a slow data fetch.
+- We could stream every component individually, but that may lead to UI popping into the screen as it becomes ready.
+- We could create a staggered effect by streaming page sections, but we need to create wrapper components.
+
+> In general, it's good practice to move your data fetches down to the components that need it, and then wrap those components in Suspense. But there is nothing wrong with streaming the sections or the whole page if that's what your application needs.
+
+### Partial rendering - an experimental feature in Next.js 14
+
+By default, a page is either using static or dynamic rendering.
+
+> Partial Prerendering is an experimental feature that allows you to render a route with a static loading shell, while keeping some parts dynamic. In other words, you can isolate the dynamic parts of a route.
+> The great thing about Partial Prerendering is that you don't need to change your code to use it. As long as you're using Suspense to wrap the dynamic parts of your route, Next.js will know which parts of your route are static and which are dynamic.
+
+## Server Components
+
+### use Server Components to fetch data
+
+benefits:
+
+- Server Components support promises, we can use async/await syntax without using `useEffect`,`useState` or data fetching libraries.
+- expensive data fetching and logic is executed on the server, the result will be sent to cleint
+- we can query data directly without additional API layer
+
+### further reading
+
+[How to Think About Security in Next.js](https://nextjs.org/blog/security-nextjs-server-components-actions)
+
+## Server Action
+
+### `use server`
+
+By adding "use server", we mark all the functions in this file as server functions. These server functions can then be called from the client or server components.
+
+### using forms with Server Action
+
+> In React, you can use the action attribute in the <form> element to invoke actions. The action will automatically receive the native FormData object, containing the captured data.
+
+```
+// Server Component
+export default function Page() {
+  // Action
+  async function create(formData: FormData) {
+    'use server';
+
+    const rawFormData = Object.fromEntries(formData.entries());
+
+    // Logic to mutate data...
+  }
+
+  // Invoke the action using the "action" attribute
+  return <form action={create}>...</form>;
+}
+```
+
+> An advantage of invoking a Server Action within a Server Component is progressive enhancement - **forms work even if JavaScript is disabled on the client.**
+> This allows users to interact with the form and submit data even if the JavaScript for the form hasn't been loaded yet or if it fails to load.
+
+## Navigating between pages
+
+### show an active link with `usePathname()` hook
+
+This is useful when need to give different style to active tab
+
+```
+export default function NavLinks() {
+  const pathname = usePathname();
+  ...
+
+  return (
+    <Link
+      ...
+     className={`.... ${pathname === link.href ? 'bg-sky-100 text-blue-600' : ''}`}
+    >
+```
+
+### use Link from next/link
+
+client-side navigation, no full page refresh
+
+## Building a search component
+
+### URL params as state
+
+URL as states seems to be trendy now, while in the past it might be considered as "ugly link". We will see more and more URL like www.example.com/product?tag=shoes&page=1
+
+The URL with parameters will be composed by a client component, e.g search bar.
+After composing the URL, the client component will call `redirect` or `router.push()` to navigate to the new path. Then, the page (by default server component) can extract the `searchParams` and pass the params to a server action to run a fetch or data query on the backend.
+
+### Debouncing
+
+> Debouncing is a programming practice that limits the rate at which a function can fire. In our case, you only want to query the database when the user has stopped typing.
+
+```
+npm i use-debounce
+```
+
+The pattern of usage in the client component:
+
+```
+const handleChange = useDebouncedCallback( (value) => {
+   // do something with the value
+   },
+   // delay in millisecond
+   1000
+ )
+
+return (
+  <div>
+    <input
+      defaultValue={defaultValue}
+      onChange={(e) => handleChange(e.target.value) }
+    />
+  </div>
+)
+```
+
+## Error handling
+
+### in server action, use try/catch
+
+`redirect` works by throwing an error, which would be caught by the `catch` block. To avoid this, you can call `redirect` after `try/catch`. `redirect` would only be reachable if `try` is successful.
+
+### use error.tsx
+
+> The error.tsx file can be used to define a UI boundary for a route segment. It serves as a catch-all for unexpected errors and allows you to display a fallback UI to your users.
+
+**Note: need to add `use client`**
+
+### no-found.tsx (404 error)
+
+## Accessibility
+
+Next.js includes `eslint-plugin-jsx-a11y` by default.
+Add `next lint` in package.json file
+
+```
+// package.json
+
+"scripts": {
+    "build": "next build",
+    "dev": "next dev",
+    "seed": "node -r dotenv/config ./scripts/seed.js",
+    "start": "next start",
+    "lint": "next lint"
+},
+```
+
+then run `npm run lint` to catch any accessibility issues locally.
+
+## Authentication
+
+This tutorial use next-auth v5 beta version.
+From the documentation [https://authjs.dev/guides/upgrade-to-v5](https://authjs.dev/guides/upgrade-to-v5), there are breaking changes comparing to previous versions.
+The way to write authentication is very different:
+In the older version, it's required to create file `/app/api/auth/[...nextauth]/route.js`.
+Now we can forget about above, as now what matters are auth.ts, auth.config.ts, middleware.ts.
+
+I'm not too much convinced with next-auth, because who knows what will be the breaking change in the next version? And it would be a heavy overload to modify an existing working site to fix a non-working authentication flow.
+
+## UI related
+
+### different layout for dashboard on desktop and mobile screen
+
+```
+    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+      {/* md:w-64 is crucial to make the effect of switching to leftsize bar  */}
+      <div className="transition-width w-full flex-none md:w-64">
+        <SideNav />
+      </div>
+      <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+    </div>
+```
+
+### Breadcrumbs navigation
+
+Example: dashbord > invoices > new
+It's a very useful UI element in dashboard, which allows user to keep track of their current location on a website, it displays the hierarchy of higher level
+parent pages above the current page.
+
+## Javascript
+
+> It's usually good practice to store monetary values in cents in your database to eliminate JavaScript floating-point errors and ensure greater accuracy.
+
+## React Form Status and Server-side validation with Zod
+
+Form seems to be one of the most complicated parts in web development.
+I have to admit chapter 14 of the tutorial is stretching my limit.
+Just a simple form with 2 input fields and 1 select fields involves hundreds of lines of code!
+This chapter shows a typical example of the "modern" way of building forms, with all the complexity to tackle accessibility, data validation and user experience.
