@@ -1,0 +1,64 @@
+---
+title: "Image overlay effect experiments"
+date: "2024-01-04"
+description: "Overlays is a common design pattern to cast a layer on top of images, which improves text readability. This post shares my thoughts on different methods."
+tags: ["tailwind", "CSS"]
+---
+
+# Image overlay effect experiments
+
+Basically there are two approaches, one is setting background image, the other is using `<img>` HTML element.
+
+## Codepen
+
+      <Iframe
+        title="tailwind image overlay with text"
+        src="https://codepen.io/antlossway/embed/LYapaBo?default-tab=html%2Cresult"
+      />
+
+## background-image approach
+
+The advange of using background-image is that the image will automatically live behind the containing text of icons.
+
+### background-blend-mode
+
+This method simply add `background-color` and `background-image`, then use `background-blend-mode: multiply`.
+
+```
+bg-[url('xxx')] bg-indigo-600 bg-blend-multiply
+```
+
+### linear-gradient + image
+
+This is also a simple method, the vanilla CSS syntax of `background-image` can specify multiple images, including `linear-gradient`.
+The images are drawn on stacking context layers on top of each other.
+
+```
+bg-[linear-gradient(rgba(70,130,180,.8),rgba(178,34,34,.8)),url('xxx')]
+```
+
+### mix-blend-multiple
+
+This is a complicated method. I will not use it unless no other choices. But this is an interesting approach that we can learn about stacking context.
+
+## <img> approach
+
+This is also quite complicated approach.
+
+### Conclusion
+
+I found that the best text readability is achieved with `background-blend-mode: multiply`. The same result can be achieved with `mix-blend-mode: multiply`, but the code is too complicated to understand.
+
+So the winner is:
+simply apply background-color and background-image and then put in a multiply blender.
+
+```
+bg-[url('xxx')] bg-indigo-600 bg-blend-multiply
+```
+
+## References
+
+<LinkToNewTab
+  text="https://blog.logrocket.com/guide-image-overlays-css/"
+  url="https://blog.logrocket.com/guide-image-overlays-css/"
+/>
