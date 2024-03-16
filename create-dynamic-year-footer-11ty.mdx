@@ -1,0 +1,50 @@
+---
+title: "Create dynamic year in footer in eleventy"
+date: "2024-03-16"
+description: "Two ways to generate dynamic year in footer"
+tags: ["11ty"]
+---
+
+## Introduction
+Recently I have fun playing with 11ty, a static site generator.
+I built a small site to host a serie of articles by fetching from a wordpress site.
+
+      <Iframe
+        title="for a better society"
+        src="https://liberty.unices.org">
+        </Iframe>
+
+I will write another article about what I learned from building that site.
+
+In this article, I just want to share an example of adding dynamic year in footer.
+The method can be used to enable calling javascript function inside template file.
+
+## Option 1: using eleventy.addGlobalData
+Add in `eleventy.config.js" or ".eleventy.js":
+```
+eleventyConfig.addGlobalData("getCurrentYear", () => {
+    return new Date().getFullYear()
+  })
+```
+
+Then in your footer.njk
+```
+<small>&copy; {{ getCurrentYear }} All rights reserved.</small>
+```
+
+## Option 2: using _data folder
+create a file `utils.js`:
+
+```
+module.exports = {
+  getCurrentYear: function () {
+    return new Date().getCurrentYear()
+  },
+}
+```
+
+Then in your footer.njk
+```
+<small>&copy; {{ utils.getCurrentYear }} All rights reserved.</small>
+```
+
