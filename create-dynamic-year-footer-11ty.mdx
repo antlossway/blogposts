@@ -11,13 +11,13 @@ I built a small site to host a serie of articles by fetching from a wordpress si
 
       <Iframe
         title="for a better society"
-        src="https://liberty.unices.org">
+        src="https://liberte.unices.org">
         </Iframe>
 
 I will write another article about what I learned from building that site.
 
 In this article, I just want to share an example of adding dynamic year in footer.
-The method can be used to enable calling javascript function inside template file.
+The method can be used to call any javascript function inside a template file.
 
 ## Option 1: using eleventy.addGlobalData
 Add in `eleventy.config.js" or ".eleventy.js":
@@ -33,7 +33,7 @@ Then in your footer.njk
 ```
 
 ## Option 2: using _data folder
-create a file `utils.js`:
+create a file `utils.js` under `_data` folder:
 
 ```
 module.exports = {
