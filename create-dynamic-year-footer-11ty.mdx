@@ -1,7 +1,7 @@
 ---
 title: "Create dynamic year in footer in eleventy"
 date: "2024-03-16"
-description: "Two ways to generate dynamic year in footer"
+description: "Several ways to generate dynamic year in footer"
 tags: ["11ty"]
 ---
 
@@ -32,7 +32,20 @@ Then in your footer.njk
 <small>&copy; {{ getCurrentYear }} All rights reserved.</small>
 ```
 
-## Option 2: using _data folder
+## Option 2: using shortcode
+Add in `eleventy.config.js" or ".eleventy.js":
+```
+  eleventyConfig.addShortcode("currentYear", () => {
+    return new Date().getFullYear()
+  })
+```
+
+Then in your footer.njk
+```
+<small>&copy; {% currentYear %} All rights reserved.</small>
+```
+
+## Option 3: using _data folder
 create a file `utils.js` under `_data` folder:
 
 ```
