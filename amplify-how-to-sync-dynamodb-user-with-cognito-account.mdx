@@ -240,7 +240,7 @@ export default withAuthenticator(Page);
 
    now it's time to test signUp flow, run `npx expo start` and launch simulator on laptop or use "expo go" mobile app, you will see a standard form including "Sign in","Forgot Password", and "Create Account" button.
 
-![Amplify UI Authentication Form](https://quinn-s3.s3.ap-southeast-1.amazonaws.com/amplify-ui-auth-form.png)
+![Amplify UI Authentication Form](/img/amplify-ui-auth-form.png)
 
 Let's create an account: fill in email and password (In previous `amplify add auth` step, I change the password rule to be minimum 6 characters and without any other check, so I can simply use 123456 as password in testing phase).
 
@@ -428,10 +428,10 @@ Go to AWS Cognito console or go to "User management" or Amplify Studio, delete t
 Then try to signup again. Then go ahead to check the "Content" in Amplify Studio, a new user should be created! The same ID links Cognito account with Dynamo User table.
 
 check out the Cognito user detail:
-![Cognito user](https://quinn-s3.s3.ap-southeast-1.amazonaws.com/amplify-studio-cognito-user.png)
+![Cognito user](/img/amplify-studio-cognito-user.png)
 
 And the user created in Dynamo DB "User" table:
-![Dynamo DB user](https://quinn-s3.s3.ap-southeast-1.amazonaws.com/amplify-studio-user-table.png)
+![Dynamo DB user](/img/amplify-studio-user-table.png)
 
 ## Error
 
